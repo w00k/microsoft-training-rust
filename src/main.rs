@@ -1,24 +1,16 @@
-/*
-Optional struct, in Rust not exist 'null' or 'nil' type, for error manage  we can use Optional (like java)
-enum Option<T> {
-    None,     // The value doesn't exist
-    Some(T),  // The value exists
+#[derive(Debug)]
+struct DivisionByZeroError;
+
+fn safe_division(dividend: f64, divisor: f64) -> Result<f64, DivisionByZeroError> {
+    if divisor == 0.0 {
+        Err(DivisionByZeroError)
+    } else {
+        Ok(dividend / divisor)
+    }
 }
-*/
+
 fn main() {
-    println!("Example for Optional");
-
-    let fruits = vec!["banana", "apple", "coconut", "orange", "strawberry"];
-
-    // pick the first item:
-    let first = fruits.get(0);
-    println!("{:?}", first);
-
-    // pick the third item:
-    let third = fruits.get(2);
-    println!("{:?}", third);
-
-    // pick the 99th item, which is non-existent:
-    let non_existent = fruits.get(99);
-    println!("{:?}", non_existent);
+    println!("{:?}", safe_division(9.0, 3.0));
+    println!("{:?}", safe_division(4.0, 0.0));
+    println!("{:?}", safe_division(0.0, 2.0));
 }
