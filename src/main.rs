@@ -1,24 +1,43 @@
-/*
-Optional struct, in Rust not exist 'null' or 'nil' type, for error manage  we can use Optional (like java)
-enum Option<T> {
-    None,     // The value doesn't exist
-    Some(T),  // The value exists
+struct Person {
+    first: String,
+    middle: Option<String>,
+    last: String,
 }
-*/
+
+fn build_full_name(person: &Person) -> String {
+    let mut full_name = String::new();
+    full_name.push_str(&person.first);
+    full_name.push_str(" ");
+
+    // TODO: Implement the part of this function that handles the person's middle name.
+    if let Some(value) = &person.middle {
+        full_name.push_str(&value);
+        full_name.push_str(" ");
+    }
+
+    full_name.push_str(&person.last);
+    full_name
+}
+
 fn main() {
-    println!("Example for Optional");
+    let john = Person {
+        first: String::from("James"),
+        middle: Some(String::from("Oliver")),
+        last: String::from("Smith"),
+    };
+    assert_eq!(build_full_name(&john), "James Oliver Smith");
 
-    let fruits = vec!["banana", "apple", "coconut", "orange", "strawberry"];
+    let alice = Person {
+        first: String::from("Alice"),
+        middle: None,
+        last: String::from("Stevens"),
+    };
+    assert_eq!(build_full_name(&alice), "Alice Stevens");
 
-    // pick the first item:
-    let first = fruits.get(0);
-    println!("{:?}", first);
-
-    // pick the third item:
-    let third = fruits.get(2);
-    println!("{:?}", third);
-
-    // pick the 99th item, which is non-existent:
-    let non_existent = fruits.get(99);
-    println!("{:?}", non_existent);
+    let bob = Person {
+        first: String::from("Robert"),
+        middle: Some(String::from("Murdock")),
+        last: String::from("Jones"),
+    };
+    assert_eq!(build_full_name(&bob), "Robert Murdock Jones");
 }
