@@ -1,31 +1,55 @@
-use std::fmt;
-
-// Debug is for print on consola for "{:?}"
-// PartialEq is for comparison in the if "==" 
-#[derive(Debug, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
+struct Person {
+    name: String,
+    age: u8,
+    favorite_fruit: String,
 }
 
-// for p1 in println "{}", implement this function for fix it 
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
+struct Dog {
+    name: String,
+    color: String,
+    likes_petting: bool,
+}
+
+trait AsJson {
+    fn as_json(&self) -> String;
+}
+
+impl AsJson for Person {
+    fn as_json(&self) -> String {
+	    format!(
+	        r#"{{ "type": "person", "name": "{}", "age": {}, "favoriteFruit": "{}" }}"#,
+	        self.name, self.age, self.favorite_fruit
+	    )
     }
 }
+
+
+impl AsJson for Dog {
+    fn as_json(&self) -> String {
+	    format!(
+	        r#"{{ "type": "dog", "name": "{}", "color": "{}", "likesPetting": {} }}"#,
+	        self.name, self.color, self.likes_petting
+	    )
+    }
+}
+
+fn send_data_as_json<T: AsJson>(value: &T) {
+    println!("{}", value.as_json());
+ }
 
 fn main() {
-    let p1 = Point { x: 1, y: 2 };
-    let p2 = Point { x: 4, y: -3 };
+    let laura = Person {
+    	name: String::from("Laura"),
+	    age: 31,
+	    favorite_fruit: String::from("apples"),
+    };
 
-    if p1 == p2 { // can't compare two Point values!
-        println!("equal!");
-    } else {
-        println!("not equal!");
-    }
+    let fido = Dog {
+	    name: String::from("Fido"),
+	    color: String::from("Black"),
+	    likes_petting: true,
+    };
 
-    println!("{}", p1); // can't print using the '{}' format specifier!
-    println!("{:?}", p1); //  can't print using the '{:?}' format specifier!
-
+    send_data_as_json(&laura);
+    send_data_as_json(&fido);
 }
