@@ -7,7 +7,17 @@ struct Point<T, U> {
 x and y expect the same type value
 */
 
-// x and y expect a different type value
+/* x and y expect a different type value
+
+Point combination will be 
+
+Point<integer, bool>
+Point<f64, &'static str>
+Point<integer, f64>
+Point<integer, integer>
+Point<bool, bool>
+
+*/
 struct Point<T, U> {
     x: T,
     y: U,
