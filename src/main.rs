@@ -1,55 +1,39 @@
-struct Person {
-    name: String,
-    age: u8,
-    favorite_fruit: String,
+#[derive(Debug)]
+struct Counter {
+    length: usize,
+    count: usize,
 }
 
-struct Dog {
-    name: String,
-    color: String,
-    likes_petting: bool,
-}
-
-trait AsJson {
-    fn as_json(&self) -> String;
-}
-
-impl AsJson for Person {
-    fn as_json(&self) -> String {
-	    format!(
-	        r#"{{ "type": "person", "name": "{}", "age": {}, "favoriteFruit": "{}" }}"#,
-	        self.name, self.age, self.favorite_fruit
-	    )
+impl Counter {
+    fn new(length: usize) -> Counter {
+        Counter { count: 0, length }
     }
 }
 
+impl Iterator for Counter {
+    type Item = usize;
 
-impl AsJson for Dog {
-    fn as_json(&self) -> String {
-	    format!(
-	        r#"{{ "type": "dog", "name": "{}", "color": "{}", "likesPetting": {} }}"#,
-	        self.name, self.color, self.likes_petting
-	    )
+    fn next(&mut self) -> Option<Self::Item> {
+        self.count += 1;
+        if self.count <= self.length {
+            Some(self.count)
+        } else {
+            None
+        }
     }
 }
-
-fn send_data_as_json<T: AsJson>(value: &T) {
-    println!("{}", value.as_json());
- }
 
 fn main() {
-    let laura = Person {
-    	name: String::from("Laura"),
-	    age: 31,
-	    favorite_fruit: String::from("apples"),
-    };
+    let counter = Counter::new(6);
+    println!("Counter just created: {:#?}", counter);
 
-    let fido = Dog {
-	    name: String::from("Fido"),
-	    color: String::from("Black"),
-	    likes_petting: true,
-    };
+    for number in Counter::new(10) {
+        println!("{}", number);
+    }
 
-    send_data_as_json(&laura);
-    send_data_as_json(&fido);
+    let sum_until_10: usize = Counter::new(10).sum();
+    assert_eq!(sum_until_10, 55);
+
+    let powers_of_2: Vec<usize> = Counter::new(8).map(|n| 2usize.pow(n as u32)).collect();
+    assert_eq!(powers_of_2, vec![2, 4, 8, 16, 32, 64, 128, 256]);
 }
