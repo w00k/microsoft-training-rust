@@ -1,32 +1,36 @@
-/*
-struct Point<T, U> {
-    x: T,
-    y: T,
+trait Area {
+    fn area(&self) -> f64;
 }
 
-x and y expect the same type value
-*/
+struct Circle {
+    radius: f64,
+}
 
-/* x and y expect a different type value
+struct Rectangle {
+    width: f64,
+    height: f64,
+}
 
-Point combination will be 
+impl Area for Circle {
+    fn area(&self) -> f64 {
+        use std::f64::consts::PI;
+        PI * self.radius.powf(2.0)
+    }
+}
 
-Point<integer, bool>
-Point<f64, &'static str>
-Point<integer, f64>
-Point<integer, integer>
-Point<bool, bool>
-
-*/
-struct Point<T, U> {
-    x: T,
-    y: U,
+impl Area for Rectangle {
+    fn area(&self) -> f64 {
+        self.width * self.height
+    }
 }
 
 fn main() {
-    let integer_and_boolean = Point { x: 5, y: false };
-    let float_and_string = Point { x: 1.0, y: "hey" };
-    let integer_and_float = Point { x: 5, y: 4.0 };
-    let both_integer = Point { x: 10, y: 30 };
-    let both_boolean = Point { x: true, y: true };
+    let circle = Circle { radius: 5.0 };
+    let rectangle = Rectangle {
+        width: 10.0,
+        height: 20.0,
+    };
+
+    println!("Circle area: {}", circle.area());
+    println!("Rectangle area: {}", rectangle.area());
 }
